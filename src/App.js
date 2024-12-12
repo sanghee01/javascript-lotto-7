@@ -30,7 +30,7 @@ class App {
       lottoList.push(lotto);
     }
     for (let lotto of lottoList) {
-      Console.print(lotto);
+      Console.print(`[${lotto.join(', ')}]`);
     }
 
     const winningLottoInput = await Console.readLineAsync('\n당첨 번호를 입력해 주세요.\n');
