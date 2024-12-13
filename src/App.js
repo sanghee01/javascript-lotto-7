@@ -1,4 +1,5 @@
 import { Console, Random } from '@woowacourse/mission-utils';
+import Lotto from './Lotto.js';
 
 class App {
   async run() {
@@ -25,12 +26,13 @@ class App {
 
     const lottoList = [];
     for (let i = 0; i < lottoQuantity; i++) {
-      const lotto = Random.pickUniqueNumbersInRange(1, 45, 6);
-      lotto.sort((a, b) => a - b);
+      const numbers = Random.pickUniqueNumbersInRange(1, 45, 6);
+      const lotto = new Lotto(numbers);
       lottoList.push(lotto);
     }
+
     for (let lotto of lottoList) {
-      Console.print(`[${lotto.join(', ')}]`);
+      Console.print(lotto.toString());
     }
 
     const winningLottoInput = await Console.readLineAsync('\n당첨 번호를 입력해 주세요.\n');
@@ -39,26 +41,8 @@ class App {
       throw new Error('[ERROR] 쉼표(,)가 잘못된 위치에 있습니다.');
     }
 
-    const winningLotto = winningLottoInput.split(',').map(Number);
-
-    winningLotto.forEach((char) => {
-      if (isNaN(char)) {
-        throw new Error('[ERROR] 쉼표(,)와 숫자 이외의 문자는 입력할 수 없습니다.');
-      }
-      if (!Number.isInteger(char)) {
-        throw new Error('[ERROR] 로또 번호는 정수여야 합니다.');
-      }
-      if (char < 1 || char > 45) {
-        throw new Error('[ERROR] 로또 번호는 1 ~ 45 범위의 숫자만 입력할 수 있습니다');
-      }
-    });
-
-    if (winningLotto.length !== 6) {
-      throw new Error('[ERROR] 로또 번호는 6개여야 합니다.');
-    }
-    if (new Set(winningLotto).size !== 6) {
-      throw new Error('[ERROR] 로또 번호는 중복되면 안됩니다.');
-    }
+    const winningNumbers = winningLottoInput.split(',').map(Number);
+    const winningLotto = new Lotto(winningNumbers);
 
     const bonusLottoInput = Number(await Console.readLineAsync('\n보너스 번호를 입력해 주세요.\n'));
 
@@ -71,22 +55,19 @@ class App {
     if (bonusLottoInput < 1 || bonusLottoInput > 45) {
       throw new Error('[ERROR] 보너스 번호는 1 ~ 45 범위의 숫자만 입력할 수 있습니다');
     }
-    if (winningLotto.includes(bonusLottoInput)) {
+    if (winningLotto.contains(bonusLottoInput)) {
       throw new Error('[ERROR] 보너스 번호는 로또 번호와 중복될 수 없습니다.');
     }
 
     const winningCount = [0, 0, 0, 0, 0];
     for (let lotto of lottoList) {
-      let count = 0;
-      lotto.forEach((number) => {
-        if (winningLotto.includes(number)) count++;
-      });
+      const matchCount = lotto.countMatchingNumbers(winningLotto.getNumbers());
 
-      if (count === 6) winningCount[0]++;
-      if (count === 5 && lotto.includes(bonusLottoInput)) winningCount[1]++;
-      if (count === 5) winningCount[2]++;
-      if (count === 4) winningCount[3]++;
-      if (count === 3) winningCount[4]++;
+      if (matchCount === 6) winningCount[0]++;
+      if (matchCount === 5 && lotto.contains(bonusLottoInput)) winningCount[1]++;
+      if (matchCount === 5) winningCount[2]++;
+      if (matchCount === 4) winningCount[3]++;
+      if (matchCount === 3) winningCount[4]++;
     }
 
     Console.print(`\n당첨 통계`);
