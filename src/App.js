@@ -1,11 +1,13 @@
 import { Console, Random } from '@woowacourse/mission-utils';
 import Lotto from './Lotto.js';
 import InputView from './InputView.js';
+import OutputView from './OutputView.js';
+
 class App {
   async run() {
     const purchaseInput = await InputView.getPurchaseAmount();
     const lottoQuantity = purchaseInput / 1000;
-    Console.print(`\n${lottoQuantity}개를 구매했습니다.`);
+    OutputView.printPurchaseResult(lottoQuantity);
 
     const lottoList = [];
     for (let i = 0; i < lottoQuantity; i++) {
@@ -15,7 +17,7 @@ class App {
     }
 
     for (let lotto of lottoList) {
-      Console.print(`[${lotto.join(', ')}]`);
+      OutputView.printLottoList(lotto);
     }
 
     const winningLottoInput = await InputView.getLottoNumber();
@@ -36,13 +38,7 @@ class App {
       if (count === 3) winningCount[4]++;
     }
 
-    Console.print(`\n당첨 통계`);
-    Console.print(`---`);
-    Console.print(`3개 일치 (5,000원) - ${winningCount[4]}개`);
-    Console.print(`4개 일치 (50,000원) - ${winningCount[3]}개`);
-    Console.print(`5개 일치 (1,500,000원) - ${winningCount[2]}개`);
-    Console.print(`5개 일치, 보너스 볼 일치 (30,000,000원) - ${winningCount[1]}개`);
-    Console.print(`6개 일치 (2,000,000,000원) - ${winningCount[0]}개`);
+    OutputView.printCalculateResult(winningCount);
 
     const getMoney =
       winningCount[4] * 5_000 +
@@ -51,8 +47,7 @@ class App {
       winningCount[1] * 30_000_000 +
       winningCount[0] * 2_000_000_000;
     const getMoneyRate = ((getMoney / purchaseInput) * 100).toFixed(1);
-
-    Console.print(`총 수익률은 ${getMoneyRate}%입니다.`);
+    OutputView.printCalculateRateResult(getMoneyRate);
   }
 }
 
