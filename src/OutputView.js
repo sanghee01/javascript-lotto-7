@@ -5,8 +5,10 @@ class OutputView {
     Console.print(`\n${lottoQuantity}개를 구매했습니다.`);
   }
 
-  static printLottoList(lotto) {
-    Console.print(`[${lotto.join(', ')}]`);
+  static printLottoList(lottoList) {
+    for (let lotto of lottoList) {
+      Console.print(`[${lotto.join(', ')}]`);
+    }
   }
 
   static printCalculateResult(winningCount) {
