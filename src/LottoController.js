@@ -1,5 +1,6 @@
 import { Random } from '@woowacourse/mission-utils';
 import Lotto from './Lotto.js';
+import { LOTTO_NUMBER_RANGE, LOTTO_RANK } from './Constants.js';
 
 class LottoController {
   static calculateLottoQuantity(purchaseAmount) {
@@ -9,7 +10,11 @@ class LottoController {
   static pickLottoNumberList(lottoQuantity) {
     const lottoList = [];
     for (let i = 0; i < lottoQuantity; i++) {
-      const numbers = Random.pickUniqueNumbersInRange(1, 45, 6);
+      const numbers = Random.pickUniqueNumbersInRange(
+        LOTTO_NUMBER_RANGE.MIN,
+        LOTTO_NUMBER_RANGE.MAX,
+        LOTTO_NUMBER_RANGE.QUANTITY,
+      );
       const lotto = new Lotto(numbers);
       lottoList.push(lotto);
     }
@@ -23,11 +28,11 @@ class LottoController {
     for (let lotto of lottoList) {
       const matchCount = lotto.countMatchingNumbers(winningLotto.getNumbers());
 
-      if (matchCount === 6) winningCount[0]++;
-      if (matchCount === 5 && lotto.contains(bonusNumber)) winningCount[1]++;
-      if (matchCount === 5) winningCount[2]++;
-      if (matchCount === 4) winningCount[3]++;
-      if (matchCount === 3) winningCount[4]++;
+      if (matchCount === LOTTO_RANK.FIRST) winningCount[0]++;
+      if (matchCount === LOTTO_RANK.SECOND && lotto.contains(bonusNumber)) winningCount[1]++;
+      if (matchCount === LOTTO_RANK.THIRD) winningCount[2]++;
+      if (matchCount === LOTTO_RANK.FOURTH) winningCount[3]++;
+      if (matchCount === LOTTO_RANK.FIFTH) winningCount[4]++;
     }
     return winningCount;
   }
