@@ -1,4 +1,5 @@
 import { Console, Random } from '@woowacourse/mission-utils';
+import Lotto from './Lotto.js';
 
 class App {
   async run() {
@@ -25,10 +26,11 @@ class App {
 
     const lottoList = [];
     for (let i = 0; i < lottoQuantity; i++) {
-      const lotto = Random.pickUniqueNumbersInRange(1, 45, 6);
-      lotto.sort((a, b) => a - b);
-      lottoList.push(lotto);
+      const numbers = Random.pickUniqueNumbersInRange(1, 45, 6);
+      const lotto = new Lotto(numbers);
+      lottoList.push(lotto.getNumbers());
     }
+
     for (let lotto of lottoList) {
       Console.print(`[${lotto.join(', ')}]`);
     }
@@ -39,27 +41,7 @@ class App {
       throw new Error('[ERROR] 쉼표(,)가 잘못된 위치에 있습니다.');
     }
 
-    const winningLotto = winningLottoInput.split(',').map(Number);
-
-    winningLotto.forEach((char) => {
-      if (isNaN(char)) {
-        throw new Error('[ERROR] 쉼표(,)와 숫자 이외의 문자는 입력할 수 없습니다.');
-      }
-      if (!Number.isInteger(char)) {
-        throw new Error('[ERROR] 로또 번호는 정수여야 합니다.');
-      }
-      if (char < 1 || char > 45) {
-        throw new Error('[ERROR] 로또 번호는 1 ~ 45 범위의 숫자만 입력할 수 있습니다');
-      }
-    });
-
-    if (winningLotto.length !== 6) {
-      throw new Error('[ERROR] 로또 번호는 6개여야 합니다.');
-    }
-    if (new Set(winningLotto).size !== 6) {
-      throw new Error('[ERROR] 로또 번호는 중복되면 안됩니다.');
-    }
-
+    const winningLotto = new Lotto(winningLottoInput.split(',').map(Number)).getNumbers();
     const bonusLottoInput = Number(await Console.readLineAsync('\n보너스 번호를 입력해 주세요.\n'));
 
     if (isNaN(bonusLottoInput)) {
