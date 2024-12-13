@@ -1,6 +1,6 @@
 import { Random } from '@woowacourse/mission-utils';
 import Lotto from './Lotto.js';
-import { LOTTO_NUMBER_RANGE, LOTTO_RANK } from './Constants.js';
+import { LOTTO_NUMBER_RANGE, LOTTO_RANK, LOTTO_RANK_MONEY } from './Constants.js';
 
 class LottoController {
   static calculateLottoQuantity(purchaseAmount) {
@@ -35,6 +35,20 @@ class LottoController {
       if (matchCount === LOTTO_RANK.FIFTH) winningCount[4]++;
     }
     return winningCount;
+  }
+
+  static calculateTotalMoney(winningCount) {
+    return (
+      winningCount[4] * LOTTO_RANK_MONEY.FIFTH +
+      winningCount[3] * LOTTO_RANK_MONEY.FOURTH +
+      winningCount[2] * LOTTO_RANK_MONEY.THIRD +
+      winningCount[1] * LOTTO_RANK_MONEY.SECOND +
+      winningCount[0] * LOTTO_RANK_MONEY.FIRST
+    );
+  }
+
+  static calculateTotalMoneyRate(totalMoney, purchaseAmount) {
+    return ((totalMoney / purchaseAmount) * 100).toFixed(1);
   }
 }
 
