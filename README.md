@@ -135,3 +135,76 @@
 총 수익률은 62.5%입니다.
 
 ```
+
+## **프로그래밍 요구 사항 1**
+
+- Node.js 20.17.0 버전에서 실행 가능해야 한다.
+- 프로그램 실행의 시작점은 `App.js`의 `run()`이다.
+- `package.json` 파일은 변경할 수 없으며, **제공된 라이브러리와 스타일 라이브러리 이외의 외부 라이브러리는 사용하지 않는다.**
+- 프로그램 종료 시 `process.exit()`를 호출하지 않는다.
+- 프로그래밍 요구 사항에서 달리 명시하지 않는 한 파일, 패키지 등의 이름을 바꾸거나 이동하지 않는다.
+- 자바스크립트 코드 컨벤션을 지키면서 프로그래밍한다.
+  - 기본적으로 [JavaScript Style Guide](https://github.com/woowacourse/woowacourse-docs/tree/main/styleguide/javascript)를 원칙으로 한다.
+
+## **프로그래밍 요구 사항 2**
+
+- indent(인덴트, 들여쓰기) depth를 3이 넘지 않도록 구현한다. 2까지만 허용한다.
+  - 예를 들어 while문 안에 if문이 있으면 들여쓰기는 2이다.
+  - 힌트: indent(인덴트, 들여쓰기) depth를 줄이는 좋은 방법은 함수(또는 메서드)를 분리하면 된다.
+- 3항 연산자를 쓰지 않는다.
+- 함수(또는 메서드)가 한 가지 일만 하도록 최대한 작게 만들어라.
+- Jest를 이용하여 정리한 기능 목록이 정상적으로 작동하는지 테스트 코드로 확인한다.
+  - 테스트 도구 사용법이 익숙하지 않다면 아래 문서를 참고하여 학습한 후 테스트를 구현한다.
+    - [Using Matchers](https://jestjs.io/docs/using-matchers)
+    - [Testing Asynchronous Code](https://jestjs.io/docs/asynchronous)
+    - [Jest로 파라미터화 테스트하기: test.each(), describe.each()](https://www.daleseo.com/jest-each)
+
+## **프로그래밍 요구 사항 3**
+
+- 함수(또는 메서드)의 길이가 15라인을 넘어가지 않도록 구현한다.
+  - 함수(또는 메서드)가 한 가지 일만 잘 하도록 구현한다.
+- else를 지양한다.
+  - 때로는 if/else, when문을 사용하는 것이 더 깔끔해 보일 수 있다. 어느 경우에 쓰는 것이 적절할지 스스로 고민해 본다.
+  - 힌트: if 조건절에서 값을 return하는 방식으로 구현하면 else를 사용하지 않아도 된다.
+- 구현한 기능에 대한 단위 테스트를 작성한다. 단, UI(System.out, System.in, Scanner) 로직은 제외한다.
+  - 단위 테스트 작성이 익숙하지 않다면 `LottoTest`를 참고하여 학습한 후 테스트를 작성한다.
+
+### **라이브러리**
+
+- `@woowacourse/mission-utils`에서 제공 하는 `Random` 및 `Console` API를 사용하여 구현해야 한다.
+  - Random 값 추출은 `Random. pickUniqueNumbersInRange()`를 활용한다.
+  - 사용자의 값을 입력 및 출력하려면 `Console.readLineAsync()`와 `Console.print()`를 활용한다.
+
+### **사용 예시**
+
+- 1에서 45 사이의 중복되지 않은 정수 6개 반환
+
+```jsx
+MissionUtils.Random.pickUniqueNumbersInRange(1, 45, 6);
+```
+
+### **Lotto 클래스**
+
+- 제공된 `Lotto` 클래스를 사용하여 구현해야 한다.
+- `Lotto`에 `numbers` 이외의 필드(인스턴스 변수)를 추가할 수 없다.
+- `numbers`의 접근 제어자인 `#`은 변경할 수 없다.
+- `Lotto`의 패키지를 변경할 수 있다.
+
+```jsx
+class Lotto {
+  #numbers;
+
+  constructor(numbers) {
+    this.#validate(numbers);
+    this.#numbers = numbers;
+  }
+
+  #validate(numbers) {
+    if (numbers.length !== 6) {
+      throw new Error('[ERROR] 로또 번호는 6개여야 합니다.');
+    }
+  }
+
+  // TODO: 추가 기능 구현
+}
+```
