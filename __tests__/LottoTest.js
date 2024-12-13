@@ -43,4 +43,9 @@ describe('로또 클래스 테스트', () => {
     expect(lotto.contains(1)).toBe(true);
     expect(lotto.contains(7)).toBe(false);
   });
+
+  test('로또 번호가 올바르게 문자열로 변환된다.', () => {
+    const lotto = new Lotto([1, 2, 3, 4, 5, 6]);
+    expect(lotto.toString()).toBe('[1, 2, 3, 4, 5, 6]');
+  });
 });
